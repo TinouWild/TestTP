@@ -1,0 +1,39 @@
+{% block _event_meeting_Points_widget %}
+    <p>Here, you can add your own event(s)</p>
+
+    {{ form_widget(form) }}
+
+    <input type="hidden" id="widgets-counter" value="0">
+
+    <div class="form-group">
+        <button type="button" id="add-meetingPoints" class="btn btn-info">Add a Meeting Point</button>
+    </div>
+{% endblock %}
+
+{% block _event_meeting_Points_entry_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block _event_meeting_Points_entry_widget %}
+    <div class="form-group" id="block_{{ id }}">
+        <div class="row">
+            <div class="col-10">
+                <div class="row">
+                    <div class="col">
+                        {{ form_widget(form.place) }}
+                    </div>
+                    <div class="col">
+                        {{ form_widget(form.time) }}
+                    </div>
+                    <div class="col">
+                        {{ form_widget(form.details) }}
+                        {{ form_errors(form.details) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn btn-danger">X</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

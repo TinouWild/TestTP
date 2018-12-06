@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile of {{ user.fullName }}{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <div class="row align-items-center">
+            <div class="col-3 text-center">
+                <img src="{{ user.avatar }}" class="rounded-circle mb-3" alt="avatar">
+                <br>
+                <span class="badge badge-primary">{{ user.events | length }} events</span>
+            </div>
+            <div class="col-9">
+                <h1 class="text-warning">{{ user.fullName }}</h1>
+                {% if user is same as(app.user) %}
+                <div class="mt-3">
+                    <a href="{{ path('account_profile') }}" class="btn btn-primary mr-2 mb-2">Edit my account</a>
+                    <a class="btn btn-primary mb-2" href="{{ path('account_password') }}">Update password</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {{ user.intro }}
+
+        <hr>
+
+        <h2 class="text-warning">Events of {{ user.fullName }}</h2>
+
+        {% if user.events | length > 0 %}
+            <div class="row">
+                {% for event in user.events %}
+                    {% include 'event/_event.html.twig' %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                <p>
+                    <strong>{{ user.fullName}}</strong> has not created events on TaskPlanner !
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% set url = path('events_show', {'slug' : event.slug}) %}
+<div class="col-md-4">
+    <div class="card bg-light mb-3 border-primary">
+        <div class="card-header text-center">
+        </div>
+
+        <a href="{{ url }}">
+            <img src="{{ event.picture.url }}" style="height: 200px; width: 100%; display: block">
+        </a>
+        <div class="card-body">
+            <h4 class="card-title text-center text-dark">{{ event.title }}</h4>
+            <p class="card-text text-center">{{ event.description }}</p>
+            <p class="card-text text-center">Organisé par {{ event.author.lastName }} {{ event.author.firstName }}</p>
+            <div class="text-center">
+                <a class="btn btn-block btn-warning" href="{{ url }}">Voir l'événement</a>
+                {% if app.user and app.user == event.author %}
+                    <a href="{{ path('events_edit', {'slug': event.slug}) }}" class="btn btn-block btn-warning">Edit the event</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

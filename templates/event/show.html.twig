@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid mt-3 mb-4">
+        <div class="event-title" style="background-image: url('{{ event.picture.url }}'); background-size: cover; height: 300px; width: 100%">
+        </div>
+    </div>
+    <div class="container mt-3 mb-4">
+        <h1 class="mt-3 mb-4 text-warning">{{ event.title }}</h1>
+        <p>{{ event.description }}</p>
+        <a href="#" class="btn btn-primary">Go to event !</a>
+        {% if app.user and app.user == event.author %}
+            <a href="{{ path('events_edit', {'slug': event.slug}) }}" class="btn btn-warning">Edit the event</a>
+
+            <a href="{{ path('events_delete', {'slug': event.slug}) }}" class="btn btn-secondary border border-danger" onclick="return confirm('Are you sure of deleting the event {{ event.title }} ?')">X</a>
+        {% endif %}
+    </div>
+
+    <div class="container mt-3 mb-4">
+        <div class="row">
+            <div class="col-md-8">
+                {% for meetingPoint in event.meetingPoints %}
+                    <div class="card text-center mb-3">
+                        <div class="card-header"></div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ meetingPoint.time | date("H:i") }}</h5>
+                            <p class="card-text">{{ meetingPoint.details }}</p>
+                        </div>
+                        <div class="card-footer border-primary">{{ meetingPoint.place }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="col">
+                {% set e = event.author %}
+                <div class="card border-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ e.fullName }}</h4>
+                        <hr>
+                        <div class="card-text">
+                            <a href="{{ path('user_show', {'slug': e.slug}) }}">
+                                <img src="{{ e.avatar }}" alt="avatar" class="rounded-circle float-left mr-3">
+                            </a>
+                            <p>{{ e.events | length }} events created on TaskPlanner !</p>
+                            <a href="{{ path('user_show', {'slug': e.slug}) }}" class="btn btn-success float-right">View profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit your event{% endblock %}
+
+{% form_theme form 'event/_collection.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="mt-3 mb-4">Edit the event : {{ event.title }}</h1>
+
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+
+        <button class="btn btn-primary" type="submit">Edit Event</button>
+
+        {{ form_end(form) }}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="/js/event.js"></script>
+
+{% endblock %}
