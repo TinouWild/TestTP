@@ -18,7 +18,7 @@ class EventController extends AbstractController
 {
     /**
      * @Route("/events", name="events_index")
-     * @IsGranted("ROLE_USER")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function index(EventRepository $event)
     {
@@ -46,6 +46,11 @@ class EventController extends AbstractController
             }
 
             $event->setAuthor($this->getUser());
+
+            foreach ($event->getGuest() as $guest){
+                $guest->getEvents($event);
+                $manager->persist($guest);
+            }
 
             $manager->persist($event);
             $manager->flush();

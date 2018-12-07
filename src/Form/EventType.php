@@ -26,6 +26,12 @@ class EventType extends Applicationtype
                     'allow_add'=> true,
                     'allow_delete' => true
                 ])
+            ->add('guest', CollectionType::class,
+                [
+                    'entry_type' => RegistrationType::class,
+                    'allow_add' => true,
+                    'allow_delete' => true
+                ])
         ;
     }
 

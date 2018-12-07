@@ -23,13 +23,13 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
      */
     private $lastName;
@@ -47,23 +47,23 @@ class User implements UserInterface
     private $avatar;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $hash;
 
     /**
-     * @Assert\EqualTo(propertyPath="hash")
+     * @Assert\EqualTo(propertyPath="hash", message="Fucking error !")
      */
     public $passwordConfirm;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(min=10, minMessage="Your intro must contains 10 characters min")
      */
     private $intro;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
 
@@ -77,6 +77,11 @@ class User implements UserInterface
      */
     private $userRoles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="guest")
+     */
+    private $guestEvent;
+
     public function getFullName() {
         return "{$this->firstName} {$this->lastName}";
     }
@@ -88,7 +93,7 @@ class User implements UserInterface
     public function initializeSlug() {
         if(empty($this->slug)) {
             $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->firstName. ' ' . $this->lastName);
+            $this->slug = $slugify->slugify($this->firstName. ' ' . $this->lastName . uniqid());
         }
     }
 
@@ -96,6 +101,7 @@ class User implements UserInterface
     {
         $this->events = new ArrayCollection();
         $this->userRoles = new ArrayCollection();
+        $this->guestEvent = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -312,6 +318,34 @@ class User implements UserInterface
         if ($this->userRoles->contains($userRole)) {
             $this->userRoles->removeElement($userRole);
             $userRole->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getGuestEvent(): Collection
+    {
+        return $this->guestEvent;
+    }
+
+    public function addGuestEvent(Event $guestEvent): self
+    {
+        if (!$this->guestEvent->contains($guestEvent)) {
+            $this->guestEvent[] = $guestEvent;
+            $guestEvent->addGuest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGuestEvent(Event $guestEvent): self
+    {
+        if ($this->guestEvent->contains($guestEvent)) {
+            $this->guestEvent->removeElement($guestEvent);
+            $guestEvent->removeGuest($this);
         }
 
         return $this;

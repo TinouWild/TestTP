@@ -56,9 +56,15 @@ class Event
      */
     private $author;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="guestEvent")
+     */
+    private $guest;
+
     public function __construct()
     {
         $this->meetingPoints = new ArrayCollection();
+        $this->guest = new ArrayCollection();
     }
 
 
@@ -165,6 +171,32 @@ class Event
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getGuest(): Collection
+    {
+        return $this->guest;
+    }
+
+    public function addGuest(User $guest): self
+    {
+        if (!$this->guest->contains($guest)) {
+            $this->guest[] = $guest;
+        }
+
+        return $this;
+    }
+
+    public function removeGuest(User $guest): self
+    {
+        if ($this->guest->contains($guest)) {
+            $this->guest->removeElement($guest);
+        }
 
         return $this;
     }
