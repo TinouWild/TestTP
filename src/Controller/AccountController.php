@@ -136,7 +136,7 @@ class AccountController extends AbstractController
                 "Your password is updated !"
             );
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('events_index');
         }
 
         return $this->render('account/password.html.twig', [
