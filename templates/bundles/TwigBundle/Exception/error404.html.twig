@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page not found{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-3 mb-4">
+        <h1 class="text-warning">Oups ! Page not found !</h1>
+        <p>You can return to the Home of TaskPlanner to check your events !</p>
+        <a href="{{ path('events_index') }}" class="btn btn-outline-warning">Back to Home</a>
+    </div>
+
+{% endblock %}

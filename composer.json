@@ -6,7 +6,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cocur/slugify": "^3.1",
-        "friendsofsymfony/user-bundle": "^2.1",
         "fzaninotto/faker": "^1.8",
         "kms/froala-editor-bundle": "dev-master",
         "sensio/framework-extra-bundle": "^5.1",
