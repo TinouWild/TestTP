@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participate to the event !{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-3 mb-4">
+        <h1 class="text-warning">Book the event : {{ event.title }}</h1>
+
+        <p>You are just now booking the event motherfucker de <strong>{{ event.author.fullName }}</strong></p>
+
+        {{ form_start(form) }}
+        <div class="alert alert-light">
+            <h2 class="text-warning">Which dates want you book ?</h2>
+            <div class="row">
+                <div class="col">
+                    {{ form_row(form.startDate) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.endDate) }}
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-warning">Have you a comment ?</h2>
+        {{ form_row(form.comment) }}
+
+        <div class="d-flex justify-content-center"><button type="submit" class="btn-lg btn-outline-warning">Booking</button></div>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

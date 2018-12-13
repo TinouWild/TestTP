@@ -61,10 +61,16 @@ class Event
      */
     private $guest;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="event")
+     */
+    private $bookings;
+
     public function __construct()
     {
         $this->meetingPoints = new ArrayCollection();
         $this->guest = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
 
@@ -196,6 +202,37 @@ class Event
     {
         if ($this->guest->contains($guest)) {
             $this->guest->removeElement($guest);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getEvent() === $this) {
+                $booking->setEvent(null);
+            }
         }
 
         return $this;

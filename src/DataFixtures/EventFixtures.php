@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Booking;
 use App\Entity\Event;
 use App\Entity\MeetingPoint;
 use App\Entity\Role;
@@ -83,6 +84,27 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                     ->setDetails($faker->paragraph(5))
                     ->setEvent($event);
                 $manager->persist($meetingPoint);
+            }
+
+            for($j = 1; $j <= mt_rand(0,10); $j++) {
+                $booking = new Booking();
+
+                $createdAt = $faker->dateTimeBetween('-6 months');
+                $startDate = $faker->dateTimeBetween('-3 months');
+
+                $duration = mt_rand(3, 10);
+                $endDate = (clone $startDate)->modify("+$duration days");
+
+                $booker = $users[mt_rand(0, count($users) - 1)];
+                $comment = $faker->paragraph();
+
+                $booking->setBooker($booker)
+                        ->setEvent($event)
+                        ->setStartDate($startDate)
+                        ->setEndDate($endDate)
+                        ->setCreatedAt($createdAt)
+                        ->setComment($comment);
+                $manager->persist($booking);
             }
 
             $manager->persist($event);

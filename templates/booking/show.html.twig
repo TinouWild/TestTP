@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participate to the event !{% endblock %}
+
+{% block body %}
+
+    {% set event = booking.event %}
+    {% set author = event.author %}
+    <div class="container mt-3 mb-4">
+        <h1 class="text-warning">Your participation n°{{ booking.id }}</h1>
+
+        <div class="row">
+            <div class="col">
+                <div class="alert alert-light">
+                    <h2 class="text-warning">Details</h2>
+                    <dl class="row">
+                        <dt class="col-md-4">Number of Participation</dt>
+                        <dt class="col-md-8">{{ booking.id }}</dt>
+                        <dt class="col-md-4">Start date</dt>
+                        <dt class="col-md-8">{{ booking.startDate | date('d/m/Y') }}</dt>
+                        <dt class="col-md-4">End date</dt>
+                        <dt class="col-md-8">{{ booking.endDate | date('d/m/Y') }}</dt>
+                        <dt class="col-md-4">Comments</dt>
+                        <dt class="col-md-8">{{ booking.comment }}</dt>
+                    </dl>
+
+                    <hr>
+
+                    <h2 class="alert-heading text-warning">Your organizator</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-3">
+                            <img src="{{ booking.event.author.avatar }}" class="rounded-circle" alt="avatar">
+                        </div>
+                        <div class="col-9">
+                            <h4>
+                                <a href="{{ path('user_show', {'slug' : author.slug}) }}">{{ author.fullName }}</a>
+                            </h4>
+
+                            <span class="badge badge-primary">{{ author.events | length }} events</span>
+                        </div>
+                    </div>
+                    {{ author.intro }}
+
+                    <a href="{{ path('user_show', {'slug': author.slug}) }}" class="btn btn-warning">More info about {{ author.fullName }}</a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert alert-light">
+                    <h2 class="alert-heading text-warning">Your event</h2>
+
+                    <h4>
+                        <a href="{{ path('events_show', {'slug': event.slug}) }}">{{ event.title }}</a>
+                    </h4>
+                    <img class="img-fluid" src="{{ event.picture.url }}" alt="image">
+                    {{ event.description }}
+
+                    <a href="{{ path('events_show', {'slug': event.slug}) }}" class="btn btn-warning">More infos !</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
