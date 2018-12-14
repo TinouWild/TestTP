@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\MeetingPoint;
+use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -30,7 +32,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/events/new", name="events_create")
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_USER")ééé
      */
     public function create(Request $request, ObjectManager $manager)
     {
@@ -48,8 +50,15 @@ class EventController extends AbstractController
             $event->setAuthor($this->getUser());
 
             foreach ($event->getGuest() as $guest){
+                $guestExist = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email'=>$guest->getEmail()]);
                 $guest->getEvents($event);
-                $manager->persist($guest);
+                dump($guest);
+                if (!empty($guestExist)) {
+                    $guest = $guestExist;
+                    $manager->persist($guest);
+                } else {
+                    $manager->persist($guest);
+                }
             }
 
             $manager->persist($event);
@@ -60,9 +69,9 @@ class EventController extends AbstractController
                 "Your event {$event->getTitle()} is created ! Please invite your friends."
             );
 
-            return $this->redirectToRoute('events_show', [
-                'slug' => $event->getSlug()
-            ]);
+//            return $this->redirectToRoute('events_show', [
+//                'slug' => $event->getSlug()
+//            ]);
         }
 
         return $this->render('event/new.html.twig', ['form' => $form->createView()]);
@@ -81,6 +90,10 @@ class EventController extends AbstractController
             foreach($event->getMeetingPoints() as $meetingPoint) {
                 $meetingPoint->setEvent($event);
                 $manager->persist($meetingPoint);
+            }
+            foreach($event->getGuest() as $guest) {
+                $guest->getEvents($event);
+                $manager->persist($guest);
             }
             $manager->persist($event);
             $manager->flush();

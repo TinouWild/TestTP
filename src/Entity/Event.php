@@ -67,7 +67,6 @@ class Event
         $this->guest = new ArrayCollection();
     }
 
-
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
@@ -75,7 +74,7 @@ class Event
     public function initializeSlug() {
         if(empty($this->slug)) {
             $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->title);
+            $this->slug = $slugify->slugify($this->title . uniqid());
         }
     }
 

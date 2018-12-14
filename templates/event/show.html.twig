@@ -37,7 +37,7 @@
                 {% set e = event.author %}
                 <div class="card border-secondary">
                     <div class="card-body">
-                        <h4 class="card-title">{{ e.fullName }}</h4>
+                        <h4 class="card-title text-warning">{{ e.fullName }}</h4>
                         <hr>
                         <div class="card-text">
                             <a href="{{ path('user_show', {'slug': e.slug}) }}">
@@ -46,6 +46,18 @@
                             <p>{{ e.events | length }} events created on TaskPlanner !</p>
                             <a href="{{ path('user_show', {'slug': e.slug}) }}" class="btn btn-success float-right">View profile</a>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card border-secondary mt-3">
+                    <div class="card-body">
+                        <h4 class="card-title text-warning">Liste des invités</h4>
+                        <hr>
+                        {% for guest in event.guest %}
+                        <div class="card-text">
+                            <p>{{ guest.email }}</p>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
