@@ -48,7 +48,9 @@ class AccountController extends AbstractController
      * @Route("/register", name="account_register")
      * @return Response
      */
-    public function register(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator)
+    public function register(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder,
+                             GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator,
+                             \Swift_Mailer $mailer)
     {
         $user = new User();
 
@@ -61,6 +63,19 @@ class AccountController extends AbstractController
 
             $manager->persist($user);
             $manager->flush();
+
+            $message = (new \Swift_Message('Registration on TaskPlanner'))
+                ->setFrom('tinouclt@gmail.com')
+                ->setTo($user->getEmail())
+                ->setBody(
+                    '<html>' .
+                    ' <body>' .
+                    '  Congratulations, you are now register on TaskPlanner !' .
+                    'You can now access to your account' . ' ' . $user->getFullName().
+                    ' </body>' .
+                    '</html>'
+                );
+            $mailer->send($message);
 
             $guardHandler->authenticateUserAndHandleSuccess(
                 $user,          // the User object you just created
