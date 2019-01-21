@@ -32,7 +32,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/events/new", name="events_create")
-     * @IsGranted("ROLE_USER")ééé
+     * @IsGranted("ROLE_USER")
      */
     public function create(Request $request, ObjectManager $manager)
     {
@@ -51,13 +51,14 @@ class EventController extends AbstractController
 
             foreach ($event->getGuest() as $guest){
                 $guestExist = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email'=>$guest->getEmail()]);
-                $guest->getEvents($event);
-                dump($guest);
-                if (!empty($guestExist)) {
-                    $guest = $guestExist;
+                if (is_null($guestExist)) {
+                    $guest->getEvents($event);
                     $manager->persist($guest);
                 } else {
-                    $manager->persist($guest);
+                    $guestExist->getEvents($event);
+                    $event->removeGuest($guest);
+                    $event->addGuest($guestExist);
+                    $manager->persist($guestExist);
                 }
             }
 

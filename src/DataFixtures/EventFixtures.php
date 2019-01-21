@@ -73,7 +73,6 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
             $event->setTitle($faker->sentence())
                 ->setDescription($faker->paragraph(10))
-                ->setPicture($this->getReference('picture_'. rand(1,9)))
                 ->setAuthor($user);
 
             for ($j = 1; $j <= mt_rand(2, 3); $j++) {
